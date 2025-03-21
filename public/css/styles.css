@@ -1,0 +1,349 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+}
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(42, 41, 41);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(9, 90, 63);
+}
+/* Navbar */
+nav {
+    background: rgba(255, 255, 255, 1);
+    color:rgb(12, 112, 79);
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    backdrop-filter: blur(5px);
+    top: 0;
+    z-index: 1000; 
+}
+
+/* Center Align Logo */
+.logo {
+    font-size: 45px;
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+/* Login Button - Aligned to Right */
+#loginBtn {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgb(12, 112, 79);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+#loginBtn:hover {
+    background: #ffffff;
+    color: black;
+}
+
+/* Sidebar Plate */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 80px;
+    background: rgba(255, 255, 255, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 20px;
+    backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    overflow: hidden;
+    transition: width 0.3s ease-in-out; /* Smooth transition */
+    z-index: 1000;
+}
+/* Expand Sidebar on Hover */
+.sidebar:hover {
+    width: 120px; /* Expanded width */
+    align-items: flex-start;
+    
+}
+
+
+/* Sidebar Buttons */
+.sidebar-btn {
+    width: 55px;
+    height: 55px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 15px 0;
+    transition: background 0.3s;
+    width: 60px; /* Default small width */
+    max-width: 100px; /* Prevents over-expansion */
+}
+.sidebar-btn:hover {
+    background: rgba(12, 112, 79, 0.1);
+    width: 50px;
+    
+}
+.sidebar-button img {
+    width: 40px; /* Adjust icon size */
+    height: 40px;
+}
+
+/* Sidebar Icons */
+.sidebar-icon {
+    width: 45px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    align-items: center;
+}
+/* Sidebar Text (Hidden Initially) */
+.sidebar-text {
+    font-size: 16px;
+    white-space: nowrap;
+    transition: opacity 0.3s ease-in-out;
+    color: rgb(12, 112, 79);
+    font-weight: bold;
+    margin-left: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Show Text on Hover */
+.sidebar:hover .sidebar-text {
+    opacity: 1;
+}
+
+/* Hover Effect */
+.sidebar-btn:hover .sidebar-icon {
+    transform: scale(1.1);
+}
+
+/* Hero Section */
+.hero-section {
+    background-image: url('../images/mainbg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(12, 112, 79);
+    text-align: center;
+    padding: 20px;
+    margin-left: 80px; /* Push content to the right to avoid overlap with sidebar */
+    transition: margin-left 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+/* Shrink effect when scrolling */
+.shrink {
+    transform: scale(0.9);  /* Adjust scaling factor */
+    opacity: 0.8;  /* Optional: Reduce opacity slightly */
+}
+.sidebar:hover ~ .hero-section,
+.sidebar:hover ~ .courses-section {
+    margin-left: 120px;
+}
+.hero-overlay {
+    background: rgba(255, 255, 255, 1);
+    padding: 60px;
+    border-radius: 10px;
+    font-size: 20px;
+    opacity: 1;
+
+    background-size: cover;
+    background-position: right;
+    text-align: left;
+}
+
+.courses-section {
+    text-align: center;
+    padding: 50px;
+    background: white;
+    margin-left: 80px;
+    
+}
+/* Move Content When Sidebar Expands */
+.sidebar:hover ~ .courses-section {
+    margin-left: 250px;
+}
+
+.courses-section h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.course-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.course-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 200px;
+}
+
+.course-card h3 {
+    color: rgb(12, 112, 79);
+}
+
+/* Form Styling */
+.form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 30%;
+    margin: auto;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+form {
+    display: flex;
+    flex-direction: column;
+}
+label {
+    margin: 10px 0 5px;
+}
+input, select {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 96%; /* Increased width */
+}
+/* Join as Tutor Section - Updated */
+#joinTutor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+#joinTutor form {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Center and Reduce Input Box Width */
+#joinTutor input {
+    width: 60%;  /* Adjust width */
+    max-width: 300px; /* Ensures it doesn’t stretch too wide */
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+button {
+    background-color:rgb(12, 112, 79);
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color:rgb(169, 189, 182);
+}
+
+.hero-section h1 {
+    font-size: 40   px;
+    font-weight: bold;
+}
+
+/* Hide Contact Us and Join Tutor Sections Initially */
+.hidden {
+    display: none !important;
+    
+}
+
+/* Modal (Login/Signup) */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    width: 350px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+}
+
+.modal-content input {
+    width: 100%;
+    margin: 12px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.modal-content button {
+    width: 100%;
+    background-color:rgb(12, 112, 79);
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.modal-content button:hover {
+    background-color:rgb(12, 112, 79);
+}
+
+/* Close Button */
+.close-modal {
+    float: right;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.close-modal:hover {
+    color: red;
+}

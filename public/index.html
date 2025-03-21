@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidya Study Circle</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">Vidya Study Circle</div>
+        <button id="loginBtn">Login / Sign Up</button>
+
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-btn" id="contactBtn">
+            <img src="images/contactus.png" alt="Contact Us" class="sidebar-icon">
+            <span class="sidebar-text">Contact Us</span>
+        </div>
+        <div class="sidebar-btn" id="tutorBtn">
+            <img src="images/tutor.png" alt="Join as Tutor" class="sidebar-icon">
+            <span class="sidebar-text">Join as Tutor</span>
+        </div>
+        <div class="sidebar-btn" id="backToTop">
+            <img src="images/backtotop.png" alt="Back to Top" class="sidebar-icon">
+            <span class="sidebar-text">Back to Top</span>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-overlay">
+            
+            <h1>Unlock Your Child's Potential with Vidya Study Circle</h1>
+            <p>Experienced & Qualified Teachers</p>
+
+        <p> Regular Tests & Assessments</p>
+                
+    <p>  Friendly & Supportive Environment</p>
+                
+<p> Personalized Attention</p>
+        </div>
+    </div>
+
+    <div class="courses-section">
+        <h2>Meet Our Teachers</h2>
+        <div class="course-list">
+            <div class="course-card">
+                <h3>Mr. Vijay S</h3>
+                <p>Our most senior faculty member, Vijay brings a wealth of experience to the classroom. His 25+ years in the corporate world with Top IT Firms, provide a unique perspective, blending real-world application with his 15+ years of teaching expertise. Mr. Vijay doesn't just teach science; he teaches how to approach and conquer real-life challenges.</p>
+            </div>
+            <div class="course-card">
+                <h3>Mr. Shivam Agarwal</h3>
+                <p>IIT Roorkee M.Tech, NIT Raipur B.Tech. 8+ years of Teaching experience. Shivam combines top-tier academic credentials with invaluable industry experience, he's ignited a passion for learning in students, transforming complex concepts into easily digestible knowledge.</p>
+            </div>
+            <div class="course-card">
+                <h3>Mrs. Megha Agrawal</h3>
+                <p>M.Tech & B.Tech in Computer Science & Engineering. Experienced teacher and former Teacher Trainer at PMKVY. Passionate about educating young minds in Social Science and Computers. Known for her excellent communication skills and ability to foster creative thinking in her students.</p>
+            </div>
+            <div class="course-card">
+                <h3>Mr. Aakash Gupta</h3>
+                <p>NIT Jaipur graduate with a stellar academic record (98% in 10th, 96% in 12th with PCMB). A dedicated and passionate educator with 5+ years of experience, specializing in Chemistry and Biology. Prepare to be inspired by his enthusiasm and expertise!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="form-container">
+        <center><h2>Student Registration</h2>
+        <form id="contactForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <!-- Standard Dropdown -->
+            <label for="standard">Standard:</label>
+            <select id="standard" name="standard" required>
+                <option value="">Select Standard</option>
+                <option value="VI">VI</option>
+                <option value="VII">VII</option>
+                <option value="VIII">VIII</option>
+                <option value="IX">IX</option>
+                <option value="X">X</option>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+        <p id="formMessage"></p></center>
+    </div>
+
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", async function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const standard = document.getElementById("standard").value;
+            const formMessage = document.getElementById("formMessage");
+
+            if (!standard) {
+                formMessage.style.color = "red";
+                formMessage.textContent = "❌ Please select a standard.";
+                return;
+            }
+
+            try {
+                const response = await fetch("/submit-form", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name, email, phone, standard })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    formMessage.style.color = "green";
+                    formMessage.textContent = "✅ Form submitted successfully!";
+                    document.getElementById("contactForm").reset();
+                } else {
+                    formMessage.style.color = "red";
+                    formMessage.textContent = `❌ ${data.message}`;
+                }
+            } catch (error) {
+                formMessage.style.color = "red";
+                formMessage.textContent = "❌ Error submitting form. Please try again.";
+            }
+        });
+    </script>
+
+    <!-- Login/Signup Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signupForm">
+                <input type="text" id="signupName" placeholder="Full Name" required>
+                <input type="email" id="signupEmail" placeholder="Email" required>
+                <input type="text" id="signupPhone" placeholder="Phone" required>
+                <input type="password" id="signupPassword" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+    
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <!-- Contact Us Section -->
+    <div id="contactUs" class="hidden">
+        <center><h2>Contact Us</h2>
+        <p>Email: support@vidyastudycircle.com</p>
+        <p>Phone: +91 8839323234</p>
+        <p>Shop No-1,Near Ideal Aqua View,Salt Lake,Sector V,Kolkata</p></center>
+    </div>
+
+    <!-- Join as Tutor Section -->
+    <div id="joinTutor" class="hidden">
+        <center><h2>Join as a Tutor</h2>
+        <input type="text" placeholder="Full Name">
+        <input type="email" placeholder="Email Address">
+        <input type="text" placeholder="Subject Expertise">
+       <p><button class="apply-btn">Apply</p></button></center>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/script.js"></script>
+
+</body>
+</html>
