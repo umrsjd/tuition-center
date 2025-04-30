@@ -1,166 +1,164 @@
-require("dotenv").config();
-const express = require("express");
-const path = require("path");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { Resend } = require("resend");
+const express = require('express');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const twilio = require('twilio');
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
-const PORT = 5000;
 
 // Middleware
-app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public"))); // Serve static files
+app.use(express.static('public'));
+app.use(cors());
 
-// MongoDB Connection
-const mongoURI = process.env.MONGO_URI;
-if (!mongoURI) {
-    console.error("❌ Error: MONGO_URI is not defined in .env file!");
-    process.exit(1);
-}
-
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log("✅ MongoDB Connected"))
-    .catch(err => {
-        console.error("❌ MongoDB Connection Error:", err);
-        process.exit(1);
-    });
-
-// Define Schema & Model
-const UserSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    phone: { type: String, required: true },
-    password: { type: String, required: true },
+// Connect to MongoDB
+// Update the mongoose.connect options
+mongoose.connect('mongodb://localhost:27017/tuition-center', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000
+}).then(() => {
+    console.log('Connected to MongoDB successfully');
+}).catch((err) => {
+    console.error('MongoDB connection error:', err);
 });
-const User = mongoose.model("User", UserSchema);
 
-const FormSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    phone: { type: String, required: true },
-    standard: { type: String, required: true }
+// User Schema
+const userSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    phone: String,
+    password: String,
+    otp: String,
+    otpExpiry: Date,
+    isVerified: { type: Boolean, default: false }
 });
-const FormData = mongoose.model("FormData", FormSchema);
 
-// Initialize Resend
+const User = mongoose.model('User', userSchema);
+
+// Signup endpoint
+const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// **Signup Route**
-app.post("/signup", async (req, res) => {
-    const { name, email, phone, password } = req.body;
-
-    if (!name || !email || !phone || !password) {
-        return res.status(400).json({ success: false, message: "All fields are required" });
-    }
-
+// Update the signup endpoint
+app.post('/api/auth/signup', async (req, res) => {
     try {
-        const existingUser = await User.findOne({ email });
+        const { name, email, phone, password } = req.body;
+
+        // Check for existing user before proceeding with signup
+        const existingUser = await User.findOne({
+            $or: [
+                { email: email, isVerified: true },
+                { phone: phone, isVerified: true }
+            ]
+        });
+
         if (existingUser) {
-            return res.status(400).json({ success: false, message: "User already exists" });
+            if (existingUser.email === email) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'This email is already registered. Please login instead.'
+                });
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: 'This phone number is already registered. Please login instead.'
+                });
+            }
         }
 
+        // If no existing verified user, proceed with signup
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, phone, password: hashedPassword });
-        await newUser.save();
 
-        // Send confirmation email using Resend
-        try {
-            const emailResponse = await resend.emails.send({
-                from: "your_email@yourdomain.com", // Replace with a verified domain
-                to: [email],
-                subject: "Registration Successful - Vidya Study Circle",
-                text: `Hello ${name},\n\nThank you for registering at Vidya Study Circle!\n\nBest regards,\nVidya Study Circle Team`,
-            });
-            console.log("📧 Signup Email Sent Response:", emailResponse);
-        } catch (emailError) {
-            console.error("❌ Error sending signup email:", emailError);
-        }
+        // Create new user or update unverified user
+        const user = await User.findOneAndUpdate(
+            { $or: [{ email }, { phone }], isVerified: false },
+            {
+                name,
+                email,
+                phone,
+                password: hashedPassword,
+                otp,
+                otpExpiry,
+                isVerified: false
+            },
+            { upsert: true, new: true }
+        );
 
-        res.status(201).json({ success: true, message: "Signup successful. Email sent!" });
+        // Send OTP via email
+        await resend.emails.send({
+            from: 'onboarding@resend.dev',
+            to: email,
+            subject: 'Verify your account',
+            text: `Your OTP is: ${otp}`
+        });
+
+        res.json({ success: true, userId: user._id });
     } catch (error) {
-        console.error("Signup Error:", error);
-        res.status(500).json({ success: false, message: "Server error" });
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error during signup' });
     }
 });
 
-// **Login Route**
-app.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.status(400).json({ success: false, message: "All fields are required" });
-    }
-
+// Add/Update login endpoint
+app.post('/api/auth/login', async (req, res) => {
     try {
+        const { email, password } = req.body;
+        
+        // Find user
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ success: false, message: "User not found" });
+            return res.status(401).json({ success: false, message: 'Email or password incorrect' });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ success: false, message: "Invalid credentials" });
+        // Verify password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword) {
+            return res.status(401).json({ success: false, message: 'Email or password incorrect' });
         }
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.status(200).json({ success: true, message: "Login successful", token });
+        // Check if user is verified
+        if (!user.isVerified) {
+            return res.status(401).json({ success: false, message: 'Please verify your account first' });
+        }
+
+        // Generate token
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+
+        res.json({
+            success: true,
+            token,
+            name: user.name,
+            message: 'Login successful!'
+        });
     } catch (error) {
-        console.error("Login Error:", error);
-        res.status(500).json({ success: false, message: "Server error" });
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error during login' });
     }
 });
 
-// Serve the Homepage (index.html)
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+// Change the port to 4000
+const PORT = process.env.PORT || 4000;
 
-// **Handle Form Submission**
-app.post("/submit-form", async (req, res) => {
+const startServer = async () => {
     try {
-        const { name, email, phone, standard } = req.body;
+        await mongoose.connect('mongodb://localhost:27017/tuition-center', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 5000
+        });
+        console.log('Connected to MongoDB successfully');
 
-        if (!name || !email || !phone || !standard) {
-            return res.status(400).json({ message: "All fields are required!" });
-        }
-
-        const newEntry = new FormData({ name, email, phone, standard });
-        await newEntry.save();
-
-        // Send email confirmation for form submission
-        try {
-            const emailResponse = await resend.emails.send({
-                from: "umrsjd123@gmail.com", // Replace with a verified domain
-                to: [email],
-                subject: "Form Submission Successful - Vidya Study Circle",
-                text: `Hello ${name},\n\nYour form has been successfully submitted.\n\nBest regards,\nVidya Study Circle Team`,
-            });
-            console.log("📧 Form Submission Email Sent Response:", emailResponse);
-        } catch (emailError) {
-            console.error("❌ Error sending form submission email:", emailError);
-        }
-
-        res.json({ success: true, message: "✅ Form submitted successfully!" });
-    } catch (error) {
-        console.error("❌ Error submitting form:", error);
-        res.status(500).json({ success: false, message: "❌ Server error!" });
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
     }
-});
+};
 
-// **Admin Route (View Form Submissions)**
-app.get("/admin/forms", async (req, res) => {
-    try {
-        const entries = await FormData.find();
-        res.json({ success: true, data: entries });
-    } catch (error) {
-        console.error("❌ Error fetching data:", error);
-        res.status(500).json({ success: false, message: "❌ Server error!" });
-    }
-});
-
-// Start Server
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+startServer();

@@ -4,15 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vidya Study Circle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
     <!-- Navigation Bar -->
     <nav>
-        <div class="logo">Vidya Study Circle</div>
-        <button id="loginBtn">Login / Sign Up</button>
-
+        <div class="logo">
+            <i class="fas fa-book-reader"></i>
+            <span>Vidya Study Circle</span>
+        </div>
+        <!-- Update the login button -->
+        <button id="loginBtn" onclick="toggleLoginModal()">Login / Sign Up</button>
+        
+        <!-- Add this script -->
+        <script>
+        function toggleLoginModal() {
+            const modal = document.getElementById('loginModal');
+            const overlay = document.querySelector('.modal-overlay');
+            modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+            overlay.style.display = overlay.style.display === 'none' ? 'block' : 'none';
+        }
+        </script>
     </nav>
 
     <!-- Sidebar -->
@@ -34,15 +49,25 @@
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="hero-overlay">
-            
-            <h1>Unlock Your Child's Potential with Vidya Study Circle</h1>
-            <p>Experienced & Qualified Teachers</p>
-
-        <p> Regular Tests & Assessments</p>
-                
-    <p>  Friendly & Supportive Environment</p>
-                
-<p> Personalized Attention</p>
+            <h1 class="animate-text">Unlock Your Child's Potential with Vidya Study Circle</h1>
+            <div class="features">
+                <div class="feature-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <p>Experienced & Qualified Teachers</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-tasks"></i>
+                    <p>Regular Tests & Assessments</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-smile"></i>
+                    <p>Friendly & Supportive Environment</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-user-graduate"></i>
+                    <p>Personalized Attention</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -147,8 +172,8 @@
             <form id="signupForm">
                 <input type="text" id="signupName" placeholder="Full Name" required>
                 <input type="email" id="signupEmail" placeholder="Email" required>
-                <input type="text" id="signupPhone" placeholder="Phone" required>
-                <input type="password" id="signupPassword" placeholder="Password" required>
+                <input type="tel" id="signupPhone" placeholder="Phone" required>
+                <input type="password" id="signupPassword" placeholder="Password" required minlength="6">
                 <button type="submit">Sign Up</button>
             </form>
     
@@ -161,24 +186,51 @@
         </div>
     </div>
     <!-- Contact Us Section -->
-    <div id="contactUs" class="hidden">
-        <center><h2>Contact Us</h2>
-        <p>Email: support@vidyastudycircle.com</p>
-        <p>Phone: +91 8839323234</p>
-        <p>Shop No-1,Near Ideal Aqua View,Salt Lake,Sector V,Kolkata</p></center>
+    <div id="contactUs" class="modal-section">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Contact Us</h2>
+            <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> Email: support@vidyastudycircle.com</p>
+                <p><i class="fas fa-phone"></i> Phone: +91 8839323234</p>
+                <p><i class="fas fa-map-marker-alt"></i> Shop No-1, Near Ideal Aqua View, Salt Lake, Sector V, Kolkata</p>
+            </div>
+        </div>
     </div>
 
     <!-- Join as Tutor Section -->
-    <div id="joinTutor" class="hidden">
-        <center><h2>Join as a Tutor</h2>
-        <input type="text" placeholder="Full Name">
-        <input type="email" placeholder="Email Address">
-        <input type="text" placeholder="Subject Expertise">
-       <p><button class="apply-btn">Apply</p></button></center>
+    <div id="joinTutor" class="modal-section">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Join as a Tutor</h2>
+            <form id="tutorForm">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="text" placeholder="Subject Expertise" required>
+                <button type="submit" class="apply-btn">Apply</button>
+            </form>
+        </div>
     </div>
 
+    <!-- Modal Overlay -->
+    <!-- Add this if not already present -->
+    <div class="modal-overlay"></div>
     <!-- Scripts -->
     <script src="js/script.js"></script>
-
+    <script src="js/auth.js"></script>
 </body>
 </html>
+
+<!-- OTP Verification Modal -->
+<div id="otpModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Verify Your Account</h2>
+        <p>Please enter the OTP sent to your email and phone</p>
+        <form id="otpForm">
+            <input type="hidden" id="userId">
+            <input type="text" id="otpInput" placeholder="Enter OTP" required maxlength="6" pattern="[0-9]{6}">
+            <button type="submit">Verify OTP</button>
+        </form>
+    </div>
+</div>

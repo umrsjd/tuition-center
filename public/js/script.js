@@ -133,3 +133,70 @@ window.addEventListener('scroll', function() {
         heroSection.classList.remove('shrink');
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const contactBtn = document.getElementById('contactBtn');
+    const tutorBtn = document.getElementById('tutorBtn');
+    const contactUs = document.getElementById('contactUs');
+    const joinTutor = document.getElementById('joinTutor');
+    const modalOverlay = document.querySelector('.modal-overlay');
+    const closeBtns = document.querySelectorAll('.close-btn');
+
+    // Contact Button Click Handler
+    contactBtn.addEventListener('click', function() {
+        contactUs.classList.add('active');
+        modalOverlay.classList.add('active');
+    });
+
+    // Tutor Button Click Handler
+    tutorBtn.addEventListener('click', function() {
+        joinTutor.classList.add('active');
+        modalOverlay.classList.add('active');
+    });
+
+    // Close Button Click Handlers
+    closeBtns.forEach(btn => {
+        btn.addEventListener('click', closeModals);
+    });
+
+    // Close when clicking overlay
+    modalOverlay.addEventListener('click', closeModals);
+
+    function closeModals() {
+        contactUs.classList.remove('active');
+        joinTutor.classList.remove('active');
+        modalOverlay.classList.remove('active');
+    }
+});
+
+// Login/Signup Modal functionality
+const loginBtn = document.getElementById('loginBtn');
+const loginModal = document.getElementById('loginModal');
+const closeModal = document.querySelector('.close-modal');
+const modalOverlay = document.querySelector('.modal-overlay');
+
+loginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'block';
+    modalOverlay.classList.add('active');
+});
+
+closeModal.addEventListener('click', () => {
+    loginModal.style.display = 'none';
+    modalOverlay.classList.remove('active');
+});
+
+modalOverlay.addEventListener('click', () => {
+    loginModal.style.display = 'none';
+    modalOverlay.classList.remove('active');
+});
+
+// Form submission handling
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    // Add your login logic here
+});
+
+document.getElementById('signupForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    // Add your signup logic here
+});

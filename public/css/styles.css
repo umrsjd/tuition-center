@@ -1,10 +1,11 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     background: #ffffff;
 }
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 8px;
@@ -23,327 +24,772 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: rgb(9, 90, 63);
 }
+
 /* Navbar */
 nav {
-    background: rgba(255, 255, 255, 1);
-    color:rgb(12, 112, 79);
-    padding: 40px;
+    background: #ffffff;
+    color: rgb(12, 112, 79);
+    padding: 15px 40px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    position: relative;
-    backdrop-filter: blur(5px);
+    position: fixed;
+    width: calc(100% - 80px);
     top: 0;
-    z-index: 1000; 
+    left: 80px;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    transition: all 0.3s ease;
 }
 
-/* Center Align Logo */
 .logo {
-    font-size: 45px;
+    font-size: 24px;
     font-weight: bold;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
+    color: rgb(12, 112, 79);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 0;
+    transition: transform 0.3s;
 }
 
-/* Login Button - Aligned to Right */
 #loginBtn {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
     background: rgb(12, 112, 79);
     color: white;
     border: none;
-    padding: 12px 18px;
+    padding: 8px 20px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 4px;
     font-size: 16px;
-    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-#loginBtn:hover {
-    background: #ffffff;
-    color: black;
-}
-
-/* Sidebar Plate */
+/* Sidebar */
 .sidebar {
     position: fixed;
     left: 0;
     top: 0;
     height: 100vh;
     width: 80px;
-    background: rgba(255, 255, 255, 1);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    position: fixed;
+}
+
+/* Add container for sidebar buttons */
+.sidebar-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 80px; /* Space from top */
+}
+
+/* Update media query for mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        padding: 0;
+    }
+
+    .sidebar-buttons {
+        flex-direction: row;
+        margin-top: 0;
+        width: 100%;
+        justify-content: space-around;
+    }
+}
+.sidebar-btn {
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    position: relative;
+}
+
+/* Update media query for sidebar */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        padding: 0;
+        justify-content: space-around;
+    }
+
+    .sidebar:hover {
+        width: 100%;
+        height: 60px;
+    }
+}
+
+.sidebar:hover {
+    width: 200px;
+}
+
+/* Adjust navbar when sidebar expands */
+.sidebar:hover + .hero-section {
+    margin-left: 200px;
+}
+
+.sidebar:hover ~ nav {
+    width: calc(100% - 200px);
+    left: 200px;
+}
+
+/* Hero Section adjustment */
+.hero-section {
+    margin-left: 80px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar:hover {
+    width: 200px;
+}
+
+/* Sidebar button styling */
+.sidebar-btn {
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    overflow: hidden; /* Contain the hover effect */
+    position: relative; /* For proper hover containment */
+}
+
+.sidebar-btn:hover {
+    background: rgba(12, 112, 79, 0.1);
+    transform: translateZ(10px);
+}
+
+/* Ensure sidebar contains all content */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 80px;
+    background: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    padding-top: 20px;
-    backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-    overflow: hidden;
-    transition: width 0.3s ease-in-out; /* Smooth transition */
-    z-index: 1000;
-}
-/* Expand Sidebar on Hover */
-.sidebar:hover {
-    width: 120px; /* Expanded width */
-    align-items: flex-start;
-    
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    z-index: 999;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Contain all hover effects */
 }
 
-
-/* Sidebar Buttons */
-.sidebar-btn {
-    width: 55px;
-    height: 55px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin: 15px 0;
-    transition: background 0.3s;
-    width: 60px; /* Default small width */
-    max-width: 100px; /* Prevents over-expansion */
-}
-.sidebar-btn:hover {
-    background: rgba(12, 112, 79, 0.1);
-    width: 50px;
-    
-}
-.sidebar-button img {
-    width: 40px; /* Adjust icon size */
-    height: 40px;
-}
-
-/* Sidebar Icons */
 .sidebar-icon {
-    width: 45px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     object-fit: contain;
-    border-radius: 50%;
-    transition: transform 0.2s;
-    align-items: center;
-}
-/* Sidebar Text (Hidden Initially) */
-.sidebar-text {
-    font-size: 16px;
-    white-space: nowrap;
-    transition: opacity 0.3s ease-in-out;
-    color: rgb(12, 112, 79);
-    font-weight: bold;
-    margin-left: 10px;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    transition: transform 0.3s ease;
 }
 
-/* Show Text on Hover */
+.sidebar-text {
+    margin-left: 15px;
+    color: rgb(12, 112, 79);
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
 .sidebar:hover .sidebar-text {
     opacity: 1;
 }
 
-/* Hover Effect */
-.sidebar-btn:hover .sidebar-icon {
-    transform: scale(1.1);
-}
-
 /* Hero Section */
 .hero-section {
-    background-image: url('../images/mainbg.jpg');
+    background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('../images/mainbg.jpg');
     background-size: cover;
     background-position: center;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgb(12, 112, 79);
-    text-align: center;
-    padding: 20px;
-    margin-left: 80px; /* Push content to the right to avoid overlap with sidebar */
-    transition: margin-left 0.3s ease-in-out;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-/* Shrink effect when scrolling */
-.shrink {
-    transform: scale(0.9);  /* Adjust scaling factor */
-    opacity: 0.8;  /* Optional: Reduce opacity slightly */
-}
-.sidebar:hover ~ .hero-section,
-.sidebar:hover ~ .courses-section {
-    margin-left: 120px;
-}
-.hero-overlay {
-    background: rgba(255, 255, 255, 1);
-    padding: 60px;
-    border-radius: 10px;
-    font-size: 20px;
-    opacity: 1;
-
-    background-size: cover;
-    background-position: right;
-    text-align: left;
-}
-
-.courses-section {
-    text-align: center;
-    padding: 50px;
-    background: white;
     margin-left: 80px;
-    
+    padding: 100px 40px;
+    transition: margin-left 0.3s ease;
 }
-/* Move Content When Sidebar Expands */
-.sidebar:hover ~ .courses-section {
-    margin-left: 250px;
+
+.hero-overlay {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 60px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+}
+
+.hero-overlay h1 {
+    font-size: 2.5rem;
+    color: rgb(12, 112, 79);
+    margin-bottom: 30px;
+    line-height: 1.3;
+}
+
+.hero-overlay p {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 15px 0;
+}
+
+/* Courses Section */
+.courses-section {
+    padding: 80px 40px;
+    margin-left: 80px;
+    background: #f8f9fa;
+    transition: margin-left 0.3s ease;
 }
 
 .courses-section h2 {
-    font-size: 32px;
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    color: rgb(12, 112, 79);
+    margin-bottom: 50px;
+    text-align: center;
 }
 
 .course-list {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
+/* Add perspective to body for 3D effects */
+body {
+    perspective: 1000px;
+}
+
+/* 3D hover effect for course cards */
 .course-card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    width: 200px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    backface-visibility: hidden;
 }
 
+.course-card:hover {
+    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+    box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* 3D animation for hero section on scroll */
+.hero-overlay {
+    transform-style: preserve-3d;
+    animation: floatIn 1s ease-out;
+    backface-visibility: hidden;
+}
+
+/* 3D hover effect for login button */
+#loginBtn {
+    transform-style: preserve-3d;
+    transition: all 0.3s ease;
+}
+
+#loginBtn:hover {
+    transform: translateY(-2px) rotateX(10deg);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 3D hover effect for sidebar buttons */
+.sidebar-btn {
+    transform-style: preserve-3d;
+    transition: all 0.3s ease;
+}
+
+.sidebar-btn:hover {
+    transform: translateZ(20px);
+    background: rgba(12, 112, 79, 0.1);
+}
+
+/* Add these keyframe animations */
+@keyframes floatIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px) rotateX(20deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
+}
+
+/* Scroll animation for course cards */
+.course-card {
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) rotateX(10deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
+}
 .course-card h3 {
     color: rgb(12, 112, 79);
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.course-card p {
+    color: #666;
+    line-height: 1.6;
 }
 
 /* Form Styling */
 .form-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 30%;
-    margin: auto;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
+
+.form-container h2 {
+    color: rgb(12, 112, 79);
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 2rem;
+}
+
 form {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
+
 label {
-    margin: 10px 0 5px;
+    color: #333;
+    font-weight: 500;
 }
+
 input, select {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 96%; /* Increased width */
+    padding: 12px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
 }
-/* Join as Tutor Section - Updated */
-#joinTutor {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+
+input:focus, select:focus {
+    border-color: rgb(12, 112, 79);
+    outline: none;
+}
+
+button[type="submit"] {
+    background: rgb(12, 112, 79);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background: rgb(9, 90, 63);
+    transform: translateY(-2px);
+}
+
+/* Update Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    top: 80px; /* Position from top */
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    z-index: 1001;
+}
+
+/* Update responsive design for modal */
+@media (max-width: 768px) {
+    .modal {
+        top: 70px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal {
+        top: 60px;
+        width: 95%;
+    }
+}
+.modal.active {
+    display: block;
+}
+
+.modal-content {
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.modal form {
+    margin-bottom: 30px;
+}
+
+.modal input {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.modal button {
+    width: 100%;
+    padding: 12px;
+    background: rgb(12, 112, 79);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.modal-content {
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
     padding: 20px;
 }
 
-#joinTutor form {
+.modal-overlay {
     display: none;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
 }
 
-/* Center and Reduce Input Box Width */
-#joinTutor input {
-    width: 60%;  /* Adjust width */
-    max-width: 300px; /* Ensures it doesn’t stretch too wide */
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    text-align: center;
+.modal-overlay.active {
+    display: block;
 }
-button {
-    background-color:rgb(12, 112, 79);
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
+
+.modal h2 {
+    color: rgb(12, 112, 79);
+    margin-bottom: 20px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
     cursor: pointer;
-}
-button:hover {
-    background-color:rgb(169, 189, 182);
-}
-
-.hero-section h1 {
-    font-size: 40   px;
-    font-weight: bold;
+    color: #666;
+    transition: color 0.3s ease;
 }
 
-/* Hide Contact Us and Join Tutor Sections Initially */
-.hidden {
-    display: none !important;
-    
+.close-modal:hover {
+    color: rgb(12, 112, 79);
 }
 
-/* Modal (Login/Signup) */
-.modal {
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav {
+        width: 100%;
+        left: 0;
+        padding: 15px 20px;
+    }
+
+    .sidebar {
+        width: 50px;
+        bottom: 0;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        background: white;
+    }
+
+    .sidebar:hover {
+        width: 100%;
+        height: auto;
+    }
+
+    .sidebar-btn {
+        padding: 10px;
+    }
+
+    .sidebar-icon {
+        width: 25px;
+        height: 25px;
+    }
+
+    .hero-section,
+    .courses-section {
+        margin-left: 0;
+        padding: 80px 15px;
+        margin-bottom: 60px; /* Space for bottom sidebar */
+    }
+
+    .course-list {
+        grid-template-columns: 1fr;
+        padding: 0 10px;
+    }
+
+    .hero-overlay {
+        padding: 30px 20px;
+    }
+
+    .hero-overlay h1 {
+        font-size: 1.8rem;
+    }
+
+    .form-container {
+        margin: 20px 15px;
+        padding: 20px;
+    }
+
+    /* Modal adjustments */
+    .modal {
+        width: 95%;
+        top: 60px;
+        padding: 20px;
+    }
+
+    .modal-section {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 18px;
+    }
+
+    .logo i {
+        font-size: 20px;
+    }
+
+    #loginBtn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+    .hero-overlay h1 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Modal Sections */
+.modal-section {
+    display: none;
+    position: fixed;
+    bottom: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+    z-index: 1001;
+    transition: bottom 0.3s ease-in-out;
+}
+
+.modal-section.active {
+    display: block;
+    bottom: 0;
+}
+
+.modal-content {
+    padding: 30px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    display: block;
+}
+
+.contact-info p {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-info i {
+    color: rgb(12, 112, 79);
+}
+
+#tutorForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.apply-btn {
+    background: rgb(12, 112, 79);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.apply-btn:hover {
+    background: rgb(9, 90, 63);
+}
+
+/* OTP Modal Styling */
+#otpModal {
     display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.95);
-    padding: 25px;
-    width: 350px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1002;
+    width: 90%;
+    max-width: 400px;
 }
 
-.modal-content input {
-    width: 100%;
-    margin: 12px 0;
+#otpModal.active {
+    display: block;
+}
+
+#otpForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#otpInput {
+    font-size: 20px;
+    letter-spacing: 5px;
+    text-align: center;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
 }
 
-.modal-content button {
-    width: 100%;
-    background-color:rgb(12, 112, 79);
+/* Add these styles for logged-in user */
+#loginBtn.logged-in {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    color: rgb(12, 112, 79);
+    border: 2px solid rgb(12, 112, 79);
+}
+
+#loginBtn.logged-in button {
+    background: rgb(12, 112, 79);
     color: white;
     border: none;
-    padding: 12px;
+    padding: 5px 10px;
+    border-radius: 4px;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
+}
+
+#loginBtn.logged-in button:hover {
+    background: rgb(9, 90, 63);
+}
+
+#userInfo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 8px 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#userInfo span {
+    color: rgb(12, 112, 79);
+    font-weight: 500;
+}
+
+.logout-btn {
+    background: rgb(12, 112, 79);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
     transition: background 0.3s;
 }
 
-.modal-content button:hover {
-    background-color:rgb(12, 112, 79);
-}
-
-/* Close Button */
-.close-modal {
-    float: right;
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-}
-
-.close-modal:hover {
-    color: red;
+.logout-btn:hover {
+    background: rgb(9, 90, 63);
 }
